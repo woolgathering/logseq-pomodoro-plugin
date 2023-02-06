@@ -138,16 +138,51 @@ async function stopTimer() {
 const main = async () => {
   logseq.useSettingsSchema(settings)
   Notification.requestPermission()
+  
+  const {exec} = require("child_process");
   console.log('plugin loaded');
   logseq.provideModel({
     startPomodoro() {
       startTimer();
-
+      exec("macos-focus-mode enable", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+      
     },
     toggleStopped() {
+      exec("macos-focus-mode disable", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
       togglePause()
     },
     stopPomodoro() {
+      exec("macos-focus-mode disable", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
       stopTimer()
     }
   })
